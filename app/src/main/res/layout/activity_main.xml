@@ -53,7 +53,7 @@
             android:text="@string/send_button_label"/>
 
         <Button
-            android:id="@+id/sound"
+            android:id="@+id/sound_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onClickSoundButton"
