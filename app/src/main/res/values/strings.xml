@@ -37,4 +37,6 @@
     <string name="toast_connection_failed">Connection failed</string>
     <string name="toast_connection_closed">Connection closed</string>
     <string name="toast_empty_message">Empty message</string>
+
+    <string name="sound_default_content">The sound is played.</string>
 </resources>

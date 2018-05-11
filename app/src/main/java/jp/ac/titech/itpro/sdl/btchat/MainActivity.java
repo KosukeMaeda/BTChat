@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private SoundPool soundPool;
     private int sound_connected;
     private int sound_disconnected;
+    private int sound_offu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         sound_connected = soundPool.load(this, R.raw.nhk_doorbell, 1);
         // https://www.nhk.or.jp/archives/creative/material/view.html?m=D0002070102_00000
         sound_disconnected = soundPool.load(this, R.raw.nhk_woodblock2, 1);
+        sound_offu = soundPool.load(this, R.raw.sound_offu, 1);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         if (btAdapter != null)
@@ -291,6 +293,18 @@ public class MainActivity extends AppCompatActivity {
             chatLogView.smoothScrollToPosition(chatLog.size());
             inputText.getEditableText().clear();
         }
+    }
+
+    public void onClickSoundButton(View v) {
+        Log.d(TAG, "onClickSoundButton");
+        message_seq++;
+        long time = System.currentTimeMillis();
+        ChatMessage message = new ChatMessage(message_seq, time, getString(R.string.sound_default_content), devName);
+        commThread.send(message);
+        chatLogAdapter.add(message);
+        chatLogAdapter.notifyDataSetChanged();
+        chatLogView.smoothScrollToPosition(chatLog.size());
+        inputText.getEditableText().clear();
     }
 
     private void setupBT() {
@@ -690,7 +704,12 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
+    private boolean isPlaySound(ChatMessage message){
+        return (message.content.equals(getString(R.string.sound_default_content)));
+    }
+
     private void showMessage(ChatMessage message) {
+        if (isPlaySound(message)) soundPool.play(sound_offu, 1.0f, 1.0f, 0, 0, 1);
         chatLogAdapter.add(message);
         chatLogAdapter.notifyDataSetChanged();
         chatLogView.smoothScrollToPosition(chatLogAdapter.getCount());
